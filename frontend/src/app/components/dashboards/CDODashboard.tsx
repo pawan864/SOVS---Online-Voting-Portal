@@ -44,7 +44,7 @@ export function CDODashboard() {
 
   useEffect(() => {
     const currentUser = authService.getCurrentUser();
-    if (!currentUser || currentUser.role !== 'cdo') {
+    if (!currentUser || (currentUser.role !== 'cec' && currentUser.role !== 'chief_election_commissioner' && currentUser.role !== 'cdo')) {
       navigate('/');
       return;
     }
@@ -90,10 +90,10 @@ export function CDODashboard() {
 
   return (
     <DashboardLayout
-      title="Chief Data Officer Dashboard"
-      subtitle="Data Analytics & Insights"
-      roleLabel="Chief Data Officer (CDO)"
-      roleColor="bg-indigo-600"
+      title="Chief Election Commissioner Dashboard"
+      subtitle="Commission Analytics & Electoral Oversight"
+      roleLabel="Chief Election Commissioner (CEC)"
+      roleColor="bg-purple-600"
     >
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

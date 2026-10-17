@@ -163,7 +163,7 @@ const MANUAL_EN = [
     { icon: <Lock size={14}/>, text: 'First-time users will be asked to set a password for future logins.' },
   ]},
   { icon: <UserCog size={18}/>, title: 'Officer Login', color: '#7c3aed', steps: [
-    { icon: <Mail size={14}/>, text: 'Select your officer role (Admin / DM / SDM / CDO).' },
+    { icon: <Mail size={14}/>, text: 'Select your officer role (Election Officer / Admin / Chief Election Commissioner).' },
     { icon: <Monitor size={14}/>, text: 'Enter your official @securevote.gov.in email address.' },
     { icon: <Lock size={14}/>, text: 'Enter your assigned password and click "Secure Login".' },
     { icon: <Shield size={14}/>, text: 'Use "Forgot Password" to reset via OTP if needed.' },
@@ -175,10 +175,10 @@ const MANUAL_EN = [
     { icon: <HelpCircle size={14}/>, text: 'Each "Send OTP" click generates a fresh OTP valid for 15 seconds.' },
   ]},
   { icon: <Info size={18}/>, title: 'Demo Credentials', color: '#dc2626', steps: [
-    { icon: <UserCog size={14}/>, text: 'Admin: admin@securevote.gov.in / admin123' },
-    { icon: <UserCog size={14}/>, text: 'DM: dm@securevote.gov.in / dm123' },
-    { icon: <UserCog size={14}/>, text: 'SDM: sdm@securevote.gov.in / sdm123' },
-    { icon: <FileText size={14}/>, text: 'Voter OTP: Shown as a popup for 15 seconds after entering Aadhaar/ECI.' },
+    { icon: <UserCog size={14}/>, text: 'Admin: admin@securevote.gov.in / Admin@1234' },
+    { icon: <UserCog size={14}/>, text: 'Election Officer: officer@securevote.gov.in / Officer@1234' },
+    { icon: <UserCog size={14}/>, text: 'Chief Election Commissioner: cec@securevote.gov.in / CEC@1234' },
+    { icon: <FileText size={14}/>, text: 'Voter: Aadhaar (1234-5678-9012) or ECI (ECI-VTR-001) → OTP: 123456' },
   ]},
   { icon: <Shield size={18}/>, title: 'Security & Privacy', color: '#0891b2', steps: [
     { icon: <Lock size={14}/>, text: 'All data encrypted with AES-256 and transmitted over HTTPS.' },
@@ -191,7 +191,7 @@ const MANUAL_EN = [
 const MANUAL_HI = [
   { icon: <UserCog size={18}/>, title: 'शुरुआत कैसे करें', color: '#1a56db', steps: [
     { icon: <Monitor size={14}/>, text: 'आधुनिक ब्राउज़र में SecureVote पोर्टल खोलें।' },
-    { icon: <Shield size={14}/>, text: 'ड्रॉपडाउन से भूमिका चुनें — मतदाता, व्यवस्थापक, डीएम, एसडीएम, या सीडीओ।' },
+    { icon: <Shield size={14}/>, text: 'ड्रॉपडाउन से भूमिका चुनें — मतदाता, चुनाव अधिकारी, व्यवस्थापक, या मुख्य चुनाव आयुक्त।' },
     { icon: <Key size={14}/>, text: 'मतदाता आधार या ईसीआई नंबर उपयोग करें; अधिकारी ईमेल क्रेडेंशियल का उपयोग करें।' },
   ]},
   { icon: <Fingerprint size={18}/>, title: 'मतदाता लॉगिन (OTP प्रक्रिया)', color: '#059669', steps: [
@@ -201,7 +201,7 @@ const MANUAL_HI = [
     { icon: <Lock size={14}/>, text: 'पहली बार के उपयोगकर्ताओं को पासवर्ड सेट करने के लिए कहा जाएगा।' },
   ]},
   { icon: <UserCog size={18}/>, title: 'अधिकारी लॉगिन', color: '#7c3aed', steps: [
-    { icon: <Mail size={14}/>, text: 'ड्रॉपडाउन से अधिकारी भूमिका चुनें।' },
+    { icon: <Mail size={14}/>, text: 'ड्रॉपडाउन से अधिकारी भूमिका चुनें (चुनाव अधिकारी / व्यवस्थापक / मुख्य चुनाव आयुक्त)।' },
     { icon: <Monitor size={14}/>, text: 'अपना आधिकारिक @securevote.gov.in ईमेल पता दर्ज करें।' },
     { icon: <Lock size={14}/>, text: 'अपना पासवर्ड दर्ज करें और "सुरक्षित लॉगिन" पर क्लिक करें।' },
     { icon: <Shield size={14}/>, text: 'यदि पासवर्ड याद न हो तो "पासवर्ड भूल गए" का उपयोग करें।' },
@@ -213,10 +213,10 @@ const MANUAL_HI = [
     { icon: <HelpCircle size={14}/>, text: '"OTP दोबारा भेजें" से नया OTP पाएं।' },
   ]},
   { icon: <Info size={18}/>, title: 'डेमो क्रेडेंशियल', color: '#dc2626', steps: [
-    { icon: <UserCog size={14}/>, text: 'व्यवस्थापक: admin@securevote.gov.in / admin123' },
-    { icon: <UserCog size={14}/>, text: 'डीएम: dm@securevote.gov.in / dm123' },
-    { icon: <UserCog size={14}/>, text: 'एसडीएम: sdm@securevote.gov.in / sdm123' },
-    { icon: <FileText size={14}/>, text: 'मतदाता OTP: आधार/ईसीआई नंबर दर्ज करने के बाद 15 सेकंड के लिए पॉप-अप में दिखाया जाता है।' },
+    { icon: <UserCog size={14}/>, text: 'व्यवस्थापक (Admin): admin@securevote.gov.in / Admin@1234' },
+    { icon: <UserCog size={14}/>, text: 'चुनाव अधिकारी (Election Officer): officer@securevote.gov.in / Officer@1234' },
+    { icon: <UserCog size={14}/>, text: 'मुख्य चुनाव आयुक्त (CEC): cec@securevote.gov.in / CEC@1234' },
+    { icon: <FileText size={14}/>, text: 'मतदाता: आधार (1234-5678-9012) या ईसीआई (ECI-VTR-001) → OTP: 123456' },
   ]},
   { icon: <Shield size={18}/>, title: 'सुरक्षा और गोपनीयता', color: '#0891b2', steps: [
     { icon: <Lock size={14}/>, text: 'सभी डेटा AES-256 एन्क्रिप्टेड और HTTPS पर प्रसारित होता है।' },
@@ -461,7 +461,13 @@ export function Login() {
   const [showNP, setShowNP] = useState(false);
   const [showCP, setShowCP] = useState(false);
 
-  const roles  = ['voter', 'admin', 'dm', 'sdm', 'cdo'];
+  const roles = ['voter', 'election_officer', 'admin', 'cec'];
+  const ROLE_DISPLAY: Record<string, { en: string; hi: string }> = {
+    voter: { en: 'Voter', hi: 'मतदाता (Voter)' },
+    election_officer: { en: 'Election Officer', hi: 'चुनाव अधिकारी (Election Officer)' },
+    admin: { en: 'Admin', hi: 'व्यवस्थापक (Admin)' },
+    cec: { en: 'Chief Election Commissioner', hi: 'मुख्य चुनाव आयुक्त (CEC)' },
+  };
   const vOpts  = ['aadhaar number', 'eci card number'];
   const vStepIdx = ({ number:0, otp:1, 'create-password':2, 'enter-password':2 } as Record<string,number>)[vStep];
   const vLabels  = [tx.stepId, tx.stepOtp, vStep === 'enter-password' ? tx.stepPwdLogin : tx.stepCreatePwd];
@@ -721,8 +727,15 @@ export function Login() {
       const data = await res.json();
       if (data.success) {
         saveAuth(data.token, data.user);
-        toast.success('Login successful!', { description: `Welcome, ${data.user.name}` });
-        const routes: Record<string, string> = { admin: '/admin-dashboard', dm: '/dm-dashboard', sdm: '/sdm-dashboard', cdo: '/cdo-dashboard' };
+        const routes: Record<string, string> = {
+          admin: '/admin-dashboard',
+          election_officer: '/officer-dashboard',
+          cec: '/cec-dashboard',
+          voter: '/voter-dashboard',
+          dm: '/officer-dashboard',
+          sdm: '/officer-dashboard',
+          cdo: '/cec-dashboard',
+        };
         setLoading(false);
         navigate(routes[data.user.role] || '/voter-dashboard');
       } else {
@@ -802,7 +815,7 @@ export function Login() {
     handleLogin(e);
   };
 
-  const fSendOtp = () => { if (!fEmail) { toast.error('Enter email'); return; } const v = ['admin@securevote.gov.in','dm@securevote.gov.in','sdm@securevote.gov.in','cdo@securevote.gov.in']; if (!v.includes(fEmail.toLowerCase())) { toast.error('Email not found'); return; } toast.success('OTP sent to ' + fEmail); setFStep('enter-otp'); };
+  const fSendOtp = () => { if (!fEmail) { toast.error('Enter email'); return; } const v = ['admin@securevote.gov.in','officer@securevote.gov.in','cec@securevote.gov.in','dm@securevote.gov.in','sdm@securevote.gov.in','cdo@securevote.gov.in']; if (!v.includes(fEmail.toLowerCase())) { toast.error('Email not found'); return; } toast.success('OTP sent to ' + fEmail); setFStep('enter-otp'); };
   const fVerify  = () => { fOtp.trim() === '123456' ? setFStep('reset-password') : toast.error('Use 123456 for demo'); };
   const fReset = async () => {
   if (!nPwd || nPwd.length < 6) { toast.error('Min 6 chars'); return; }
@@ -1158,15 +1171,16 @@ export function Login() {
                         <div className="space-y-2">
                           <Label>{tx.selectRole}</Label>
                           <button type="button" onClick={() => { setShowRoles(!showRoles); clrErr('role'); }}
-                            className={`w-full border rounded-md px-3 py-2 text-left dark:text-white ${errs.role?'border-red-500':'border-gray-300 dark:border-gray-700'}`}>
-                            {role ? role.toUpperCase() : tx.chooseRole}
+                            className={`w-full border rounded-md px-3 py-2 text-left dark:text-white flex items-center justify-between ${errs.role?'border-red-500':'border-gray-300 dark:border-gray-700'}`}>
+                            <span>{role ? (lang === 'hi' ? ROLE_DISPLAY[role]?.hi || role : ROLE_DISPLAY[role]?.en || role) : tx.chooseRole}</span>
+                            <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${showRoles ? 'rotate-180' : ''}`} />
                           </button>
                           {showRoles && (
-                            <div className="max-h-28 overflow-y-auto border border-gray-300 dark:border-gray-700 rounded-md">
+                            <div className="max-h-56 overflow-y-auto border border-gray-300 dark:border-gray-700 rounded-md shadow-md bg-white dark:bg-gray-900 divide-y divide-gray-100 dark:divide-gray-800">
                               {roles.map(r => (
                                 <button key={r} type="button" onClick={() => { setRole(r); setShowRoles(false); resetVoter(); }}
-                                  className="block w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 text-sm dark:text-white">
-                                  {r.toUpperCase()}
+                                  className={`block w-full text-left px-3.5 py-2.5 hover:bg-gray-100 dark:hover:bg-gray-800 text-sm font-medium dark:text-white transition-colors ${role === r ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 font-semibold' : ''}`}>
+                                  {lang === 'hi' ? ROLE_DISPLAY[r]?.hi || r : ROLE_DISPLAY[r]?.en || r}
                                 </button>
                               ))}
                             </div>

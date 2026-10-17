@@ -40,7 +40,7 @@ export function DMDashboard() {
 
   useEffect(() => {
     const currentUser = authService.getCurrentUser();
-    if (!currentUser || currentUser.role !== 'dm') {
+    if (!currentUser || (currentUser.role !== 'election_officer' && currentUser.role !== 'dm')) {
       navigate('/');
       return;
     }
@@ -78,10 +78,10 @@ export function DMDashboard() {
 
   return (
     <DashboardLayout
-      title="District Manager Dashboard"
-      subtitle={user.district || 'District Management'}
-      roleLabel="District Manager (DM)"
-      roleColor="bg-blue-600"
+      title="Election Officer Dashboard"
+      subtitle={user.district || 'Election Operations & Polling Station Management'}
+      roleLabel="Election Officer"
+      roleColor="bg-emerald-600"
     >
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

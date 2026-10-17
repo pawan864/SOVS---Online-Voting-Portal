@@ -102,11 +102,10 @@ The frontend application will run on **`http://localhost:5173`** with an automat
 
 | Role | Email | Password / OTP | Responsibilities |
 | :--- | :--- | :--- | :--- |
-| **System Admin** | `admin@securevote.gov.in` | `Admin@1234` | Full system control, create elections, manage users |
-| **District Magistrate (DM)** | `dm@securevote.gov.in` | `DM@5678` | District election oversight, booth allocations |
-| **Sub-Divisional Magistrate (SDM)** | `sdm@securevote.gov.in` | `SDM@9012` | Sub-district administration, incident management |
-| **Chief Development Officer (CDO)** | `cdo@securevote.gov.in` | `CDO@3456` | Booth infrastructure, turnout metrics |
-| **Verified Voter** | `voter@example.com` | OTP Flow (`VTR-001-2026`) | Cast encrypted ballots, view verification receipts |
+| **Verified Voter** | `voter@example.com` | OTP Flow (`123456`) | Cast encrypted ballots, view verification receipts |
+| **Election Officer** | `officer@securevote.gov.in` | `Officer@1234` | Polling station oversight, turnout & incident management |
+| **System Admin** | `admin@securevote.gov.in` | `Admin@1234` | System control, create elections, manage users & security |
+| **Chief Election Commissioner (CEC)** | `cec@securevote.gov.in` | `CEC@1234` | Apex commission authority, electoral certification & analytics |
 
 ---
 

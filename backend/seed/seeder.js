@@ -1,4 +1,6 @@
 require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
+const dns      = require('dns');
+try { dns.setServers(['8.8.8.8', '1.1.1.1']); } catch (_) {}
 const mongoose = require('mongoose');
 
 const User     = require('../models/User');
@@ -30,32 +32,22 @@ const USERS = [
   {
     voterId:    'VTR-003-2026',
     name:       'Priya Verma',
-    email:      'dm@securevote.gov.in',
-    password:   'DM@5678',
-    role:       'dm',
+    email:      'officer@securevote.gov.in',
+    password:   'Officer@1234',
+    role:       'election_officer',
     district:   'Lucknow',
-    department: 'District Management',
+    department: 'Election Operations',
     avatar:     'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
   },
   {
     voterId:    'VTR-004-2026',
     name:       'Amit Tiwari',
-    email:      'sdm@securevote.gov.in',
-    password:   'SDM@9012',
-    role:       'sdm',
-    district:   'Lucknow',
-    department: 'Sub-District Operations',
+    email:      'cec@securevote.gov.in',
+    password:   'CEC@1234',
+    role:       'cec',
+    district:   'New Delhi',
+    department: 'Election Commission of India Apex',
     avatar:     'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400',
-  },
-  {
-    voterId:    'VTR-005-2026',
-    name:       'Sunita Pandey',
-    email:      'cdo@securevote.gov.in',
-    password:   'CDO@3456',
-    role:       'cdo',
-    district:   'Lucknow',
-    department: 'Chief Development Office',
-    avatar:     'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400',
   },
 ];
 
@@ -158,30 +150,29 @@ const seed = async () => {
 
     // ── Seed Incidents ─────────────────────────────────────────────
     console.log('⚠️  Seeding incidents...');
-    const dmUser = createdUsers.find(u => u.role === 'dm');
+    const officerUser = createdUsers.find(u => u.role === 'election_officer') || createdUsers[0];
     for (const incData of INCIDENTS) {
-      await Incident.create({ ...incData, reportedBy: dmUser._id });
+      await Incident.create({ ...incData, reportedBy: officerUser._id });
       console.log(`   ✔ ${incData.boothName}: ${incData.type} (${incData.status})`);
     }
 
     // ── Seed Audit Logs ────────────────────────────────────────────
     console.log('📋 Seeding audit logs...');
     await AuditLog.insertMany([
-      { action: 'SYSTEM_START',       userName: 'System',    details: 'SecureVote backend started',           type: 'info',    createdAt: new Date(Date.now() - 2 * 3600000) },
-      { action: 'ELECTION_ACTIVATED', userName: 'System',    details: '2026 Presidential Election activated', type: 'success', createdAt: new Date(Date.now() - 2 * 3600000) },
-      { action: 'INCIDENT_REPORTED',  userName: dmUser.name, userRole: 'dm', details: 'Incident at Booth 4 — Chinhat', type: 'warning', createdAt: new Date(Date.now() - 22 * 60000) },
-      { action: 'BLOCKCHAIN_SYNC',    userName: 'System',    details: 'Blockchain sync completed',            type: 'success', createdAt: new Date(Date.now() - 2 * 60000) },
+      { action: 'SYSTEM_START',       userName: 'System',          details: 'SecureVote backend started',           type: 'info',    createdAt: new Date(Date.now() - 2 * 3600000) },
+      { action: 'ELECTION_ACTIVATED', userName: 'System',          details: '2026 Presidential Election activated', type: 'success', createdAt: new Date(Date.now() - 2 * 3600000) },
+      { action: 'INCIDENT_REPORTED',  userName: officerUser.name,   userRole: 'election_officer', details: 'Incident at Booth 4 — Chinhat', type: 'warning', createdAt: new Date(Date.now() - 22 * 60000) },
+      { action: 'BLOCKCHAIN_SYNC',    userName: 'System',          details: 'Blockchain sync completed',            type: 'success', createdAt: new Date(Date.now() - 2 * 60000) },
     ]);
     console.log('   ✔ Audit logs seeded');
 
     console.log('\n🎉 Database seeded successfully!');
     console.log('─────────────────────────────────────────────');
     console.log('📧 Login Credentials:');
-    console.log('   ADMIN  admin@securevote.gov.in  / Admin@1234');
-    console.log('   DM     dm@securevote.gov.in     / DM@5678');
-    console.log('   SDM    sdm@securevote.gov.in    / SDM@9012');
-    console.log('   CDO    cdo@securevote.gov.in    / CDO@3456');
-    console.log('   VOTER  OTP flow → OTP: 123456');
+    console.log('   VOTER                    OTP flow (Aadhaar / ECI) → OTP: 123456');
+    console.log('   ELECTION OFFICER         officer@securevote.gov.in / Officer@1234');
+    console.log('   ADMIN                    admin@securevote.gov.in   / Admin@1234');
+    console.log('   CHIEF ELECTION COMM.     cec@securevote.gov.in     / CEC@1234');
     console.log('─────────────────────────────────────────────\n');
     process.exit(0);
   } catch (error) {

@@ -1,6 +1,6 @@
 // Authentication and security utilities
 
-export type UserRole = 'voter' | 'admin' | 'dm' | 'sdm' | 'cdo';
+export type UserRole = 'voter' | 'election_officer' | 'admin' | 'cec' | 'dm' | 'sdm' | 'cdo';
 
 export interface User {
   id: string;
@@ -54,50 +54,38 @@ const mockUsersWithPasswords: (User & { password: string })[] = [
   },
   {
     id: '2',
+    email: 'officer@securevote.gov.in',
+    name: 'Priya Verma',
+    role: 'election_officer',
+    hasVoted: {},
+    voterId: 'VTR-002-2026',
+    password: 'Officer@1234',
+    district: 'Lucknow',
+    department: 'Election Operations',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400'
+  },
+  {
+    id: '3',
     email: 'admin@securevote.gov.in',
     name: 'Raj Sharma',
     role: 'admin',
     hasVoted: {},
-    voterId: 'VTR-002-2026',
+    voterId: 'VTR-003-2026',
     password: 'Admin@1234',
     department: 'System Administration',
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400'
   },
   {
-    id: '3',
-    email: 'dm@securevote.gov.in',
-    name: 'Priya Verma',
-    role: 'dm',
-    hasVoted: {},
-    voterId: 'VTR-003-2026',
-    password: 'DM@5678',
-    district: 'Lucknow',
-    department: 'District Management',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400'
-  },
-  {
     id: '4',
-    email: 'sdm@securevote.gov.in',
+    email: 'cec@securevote.gov.in',
     name: 'Amit Tiwari',
-    role: 'sdm',
+    role: 'cec',
     hasVoted: {},
     voterId: 'VTR-004-2026',
-    password: 'SDM@9012',
-    district: 'Lucknow',
-    department: 'Sub-District Operations',
+    password: 'CEC@1234',
+    district: 'New Delhi',
+    department: 'Election Commission of India Apex',
     avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400'
-  },
-  {
-    id: '5',
-    email: 'cdo@securevote.gov.in',
-    name: 'Sunita Pandey',
-    role: 'cdo',
-    hasVoted: {},
-    voterId: 'VTR-005-2026',
-    password: 'CDO@3456',
-    district: 'Lucknow',
-    department: 'Chief Development Office',
-    avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400'
   }
 ];
 

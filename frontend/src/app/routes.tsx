@@ -26,6 +26,10 @@ export const router = createBrowserRouter([
 
       { path: "admin-dashboard", Component: AdminDashboard },
 
+      { path: "officer-dashboard", Component: DMDashboard },
+
+      { path: "cec-dashboard", Component: CDODashboard },
+
       { path: "dm-dashboard", Component: DMDashboard },
 
       { path: "sdm-dashboard", Component: SDMDashboard },

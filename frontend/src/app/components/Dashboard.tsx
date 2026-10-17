@@ -29,14 +29,14 @@ export function Dashboard() {
         case 'admin':
           navigate('/admin-dashboard');
           break;
+        case 'election_officer':
         case 'dm':
-          navigate('/dm-dashboard');
-          break;
         case 'sdm':
-          navigate('/sdm-dashboard');
+          navigate('/officer-dashboard');
           break;
+        case 'cec':
         case 'cdo':
-          navigate('/cdo-dashboard');
+          navigate('/cec-dashboard');
           break;
       }
     }
