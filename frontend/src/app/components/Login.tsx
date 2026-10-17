@@ -11,8 +11,7 @@ import {
   Monitor, Smartphone, Wifi, Key, Languages,
 } from 'lucide-react';
 import { toast } from 'sonner';
-
-const API = 'https://sovs-backend-bf8j.onrender.com/api';
+const API = import.meta.env.VITE_API_URL || (typeof window !== 'undefined' && window.location.hostname === 'localhost' ? '/api' : 'https://sovs-backend-bf8j.onrender.com/api');
 type ForgotStep = 'idle' | 'enter-email' | 'enter-otp' | 'reset-password' | 'done';
 type VoterStep  = 'number' | 'otp' | 'create-password' | 'enter-password';
 type Lang = 'en' | 'hi';
@@ -702,13 +701,23 @@ export function Login() {
     setPwdL(false);
   };
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault(); setLoading(true);
+  const handleLogin = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!loginEmail.trim() || !loginPwd.trim()) {
+      setErrs(p => ({
+        ...p,
+        email: !loginEmail.trim() ? (lang === 'hi' ? 'कृपया ईमेल दर्ज करें' : 'Please enter your email') : p.email,
+        pwd: !loginPwd.trim() ? (lang === 'hi' ? 'कृपया पासवर्ड दर्ज करें' : 'Please enter your password') : p.pwd,
+      }));
+      return;
+    }
+    setLoading(true);
     try {
       const res = await fetch(`${API}/auth/login`, {
-  method: 'POST', headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ email: loginEmail, password: loginPwd, role }),
-});
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: loginEmail.trim(), password: loginPwd, role }),
+      });
       const data = await res.json();
       if (data.success) {
         saveAuth(data.token, data.user);
@@ -716,8 +725,81 @@ export function Login() {
         const routes: Record<string, string> = { admin: '/admin-dashboard', dm: '/dm-dashboard', sdm: '/sdm-dashboard', cdo: '/cdo-dashboard' };
         setLoading(false);
         navigate(routes[data.user.role] || '/voter-dashboard');
-      } else { toast.error('Login failed', { description: data.message }); setLoading(false); }
-    } catch { toast.error('Cannot reach server'); setLoading(false); }
+      } else {
+        toast.error('Login failed', { description: data.message });
+        setLoading(false);
+      }
+    } catch {
+      toast.error('Cannot reach server');
+      setLoading(false);
+    }
+  };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // 1. If no role selected
+    if (!role) {
+      setErrs(p => ({
+        ...p,
+        role: lang === 'hi' ? 'कृपया पहले अपनी भूमिका (Role) चुनें' : 'Please select your role first'
+      }));
+      setShowRoles(true);
+      toast.warning(lang === 'hi' ? 'कृपया पहले अपनी भूमिका चुनें' : 'Please select a role first');
+      return;
+    }
+
+    // 2. If role is voter
+    if (role === 'voter') {
+      if (vStep === 'number') {
+        if (!vMethod) {
+          setShowVMeth(true);
+          toast.warning(lang === 'hi' ? 'कृपया सत्यापन विधि चुनें' : 'Please choose verification method');
+          return;
+        }
+        if (!vNum.trim()) {
+          setErrs(p => ({ ...p, vNum: lang === 'hi' ? 'कृपया नंबर दर्ज करें' : 'Please enter number' }));
+          return;
+        }
+        const vErr = vMethod === 'aadhaar number' ? valAadhaar(vNum) : valECI(vNum);
+        if (vErr) {
+          setErrs(p => ({ ...p, vNum: vErr }));
+          return;
+        }
+        if (!otpL) sendOTP();
+        return;
+      }
+      if (vStep === 'otp') {
+        if (!otp.trim() || otp.trim().length < 6) {
+          setErrs(p => ({ ...p, otp: lang === 'hi' ? 'कृपया 6 अंकों का OTP दर्ज करें' : 'Please enter 6-digit OTP' }));
+          return;
+        }
+        if (!otpL) verifyOTP();
+        return;
+      }
+      if (vStep === 'create-password') {
+        if (!pwdL) handleCreatePwd();
+        return;
+      }
+      if (vStep === 'enter-password') {
+        if (!pwdL) handleEnterPwd();
+        return;
+      }
+      return;
+    }
+
+    // 3. Officer roles (admin, dm, sdm, cdo)
+    if (!loginEmail.trim() || !loginPwd.trim()) {
+      setErrs(p => ({
+        ...p,
+        email: !loginEmail.trim() ? (lang === 'hi' ? 'कृपया ईमेल दर्ज करें' : 'Please enter your email') : p.email,
+        pwd: !loginPwd.trim() ? (lang === 'hi' ? 'कृपया पासवर्ड दर्ज करें' : 'Please enter your password') : p.pwd,
+      }));
+      toast.error(lang === 'hi' ? 'कृपया ईमेल और पासवर्ड दोनों दर्ज करें' : 'Please enter both email and password');
+      return;
+    }
+
+    handleLogin(e);
   };
 
   const fSendOtp = () => { if (!fEmail) { toast.error('Enter email'); return; } const v = ['admin@securevote.gov.in','dm@securevote.gov.in','sdm@securevote.gov.in','cdo@securevote.gov.in']; if (!v.includes(fEmail.toLowerCase())) { toast.error('Email not found'); return; } toast.success('OTP sent to ' + fEmail); setFStep('enter-otp'); };
@@ -1070,7 +1152,7 @@ export function Login() {
                   </CardHeader>
                   <CardContent>
                     {fStep !== 'idle' ? renderForgot() : (
-                      <form onSubmit={handleLogin} className="space-y-6 lang-fade" key={`form-${lang}`}>
+                      <form onSubmit={handleFormSubmit} className="space-y-6 lang-fade" key={`form-${lang}`}>
 
                         {/* Role */}
                         <div className="space-y-2">
@@ -1129,6 +1211,7 @@ export function Login() {
                                     <Label>{tx.enterLabel} {vMethod}</Label>
                                     <Input placeholder={vMethod==='aadhaar number'?'1234-5678-9012':'ECI-VTR-001'} value={vNum} className={errs.vNum?'border-red-500':''}
                                       onChange={e=>{setVNum(e.target.value);clrErr('vNum');}}
+                                      onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();handleFormSubmit(e);}}}
                                       onBlur={()=>{if(vNum){const e=vMethod==='aadhaar number'?valAadhaar(vNum):valECI(vNum);if(e)setErrs(p=>({...p,vNum:e}));}}}/>
                                     {errs.vNum&&<p className="text-xs text-red-500">⚠ {errs.vNum}</p>}
                                   </div>
@@ -1166,7 +1249,9 @@ export function Login() {
 
                                 <div className="space-y-2">
                                   <Label>{tx.enterOtp}</Label>
-                                  <Input placeholder={tx.otpPlaceholder} value={otp} maxLength={6} className={errs.otp?'border-red-500':''} onChange={e=>{setOtp(e.target.value.replace(/\D/g,''));clrErr('otp');}}/>
+                                  <Input placeholder={tx.otpPlaceholder} value={otp} maxLength={6} className={errs.otp?'border-red-500':''}
+                                    onChange={e=>{setOtp(e.target.value.replace(/\D/g,''));clrErr('otp');}}
+                                    onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();handleFormSubmit(e);}}}/>
                                   {errs.otp&&<p className="text-xs text-red-500">⚠ {errs.otp}</p>}
                                 </div>
                                 <Button type="button" className="w-full" style={{background:theme.primary}} onClick={verifyOTP} disabled={otpL}>{otpL?tx.verifying:tx.verifyOtpBtn}</Button>
@@ -1181,7 +1266,9 @@ export function Login() {
                                 <div className="space-y-2">
                                   <Label>{tx.createPwd}</Label>
                                   <div className="relative">
-                                    <Input type={showVP?'text':'password'} placeholder={tx.pwdPlaceholder} value={vPwd} className={errs.vPwd?'border-red-500':''} onChange={e=>{setVPwd(e.target.value);clrErr('vPwd');}}/>
+                                    <Input type={showVP?'text':'password'} placeholder={tx.pwdPlaceholder} value={vPwd} className={errs.vPwd?'border-red-500':''}
+                                      onChange={e=>{setVPwd(e.target.value);clrErr('vPwd');}}
+                                      onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();handleFormSubmit(e);}}}/>
                                     <button type="button" onClick={()=>setShowVP(!showVP)} className="absolute right-3 top-1/2 -translate-y-1/2">{showVP?<EyeOff className="w-4 h-4 text-gray-400"/>:<Eye className="w-4 h-4 text-gray-400"/>}</button>
                                   </div>
                                   {vPwd&&(()=>{const s=getPwdStrength(vPwd);return(<div><div style={{height:4,background:'#e2e8f0',borderRadius:4,overflow:'hidden',marginTop:6}}><div style={{height:'100%',width:`${(s.score/4)*100}%`,background:s.color,borderRadius:4,transition:'width .3s ease'}}/></div><p style={{fontSize:11,color:s.color,fontWeight:600,marginTop:3}}>{lang==='hi'?s.labelHi:s.label}</p></div>)})()}
@@ -1190,7 +1277,9 @@ export function Login() {
                                 <div className="space-y-2">
                                   <Label>{tx.confirmPwd}</Label>
                                   <div className="relative">
-                                    <Input type={showVC?'text':'password'} placeholder={tx.rePwdPlaceholder} value={vConf} className={errs.vConf?'border-red-500':''} onChange={e=>{setVConf(e.target.value);clrErr('vConf');}}/>
+                                    <Input type={showVC?'text':'password'} placeholder={tx.rePwdPlaceholder} value={vConf} className={errs.vConf?'border-red-500':''}
+                                      onChange={e=>{setVConf(e.target.value);clrErr('vConf');}}
+                                      onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();handleFormSubmit(e);}}}/>
                                     <button type="button" onClick={()=>setShowVC(!showVC)} className="absolute right-3 top-1/2 -translate-y-1/2">{showVC?<EyeOff className="w-4 h-4 text-gray-400"/>:<Eye className="w-4 h-4 text-gray-400"/>}</button>
                                   </div>
                                   {vConf&&vPwd!==vConf&&<p className="text-xs text-red-500">{tx.pwdNoMatch}</p>}
@@ -1209,7 +1298,9 @@ export function Login() {
                                 <div className="space-y-2">
                                   <Label>{tx.yourPwd}</Label>
                                   <div className="relative">
-                                    <Input type={showVP?'text':'password'} placeholder={tx.enterPwdPh} value={vPwd} className={errs.vPwd?'border-red-500':''} onChange={e=>{setVPwd(e.target.value);clrErr('vPwd');}} onKeyDown={e=>{if(e.key==='Enter')handleEnterPwd();}} autoFocus/>
+                                    <Input type={showVP?'text':'password'} placeholder={tx.enterPwdPh} value={vPwd} className={errs.vPwd?'border-red-500':''}
+                                      onChange={e=>{setVPwd(e.target.value);clrErr('vPwd');}}
+                                      onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();handleFormSubmit(e);}}} autoFocus/>
                                     <button type="button" onClick={()=>setShowVP(!showVP)} className="absolute right-3 top-1/2 -translate-y-1/2">{showVP?<EyeOff className="w-4 h-4 text-gray-400"/>:<Eye className="w-4 h-4 text-gray-400"/>}</button>
                                   </div>
                                   {errs.vPwd&&<p className="text-xs text-red-500">⚠ {errs.vPwd}</p>}
@@ -1228,14 +1319,16 @@ export function Login() {
                               <Label>{tx.emailAddr}</Label>
                               <Input type="email" placeholder={tx.emailPh} value={loginEmail} disabled={loading} className={errs.email?'border-red-500':''}
                                 onChange={e=>{setLoginEmail(e.target.value);clrErr('email');}}
+                                onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();document.getElementById('officer-password-input')?.focus();}}}
                                 onBlur={()=>{const e=valEmail(loginEmail);if(e)setErrs(p=>({...p,email:e}));}}/>
                               {errs.email&&<p className="text-xs text-red-500">⚠ {errs.email}</p>}
                             </div>
                             <div className="space-y-2">
                               <Label>{tx.password}</Label>
                               <div className="relative">
-                                <Input type={showPwd?'text':'password'} placeholder="••••••••" value={loginPwd} disabled={loading} className={errs.pwd?'border-red-500':''}
+                                <Input id="officer-password-input" type={showPwd?'text':'password'} placeholder="••••••••" value={loginPwd} disabled={loading} className={errs.pwd?'border-red-500':''}
                                   onChange={e=>{setLoginPwd(e.target.value);clrErr('pwd');}}
+                                  onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();handleFormSubmit(e);}}}
                                   onBlur={()=>{const e=valPwd(loginPwd);if(e)setErrs(p=>({...p,pwd:e}));}}/>
                                 <button type="button" onClick={()=>setShowPwd(!showPwd)} className="absolute right-3 top-1/2 -translate-y-1/2">{showPwd?<EyeOff className="w-4 h-4"/>:<Eye className="w-4 h-4"/>}</button>
                               </div>
