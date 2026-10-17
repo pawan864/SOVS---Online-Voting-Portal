@@ -7,6 +7,7 @@ const UserSchema = new mongoose.Schema(
     name:       { type: String, required: true, trim: true },
     email:      { type: String, required: true, unique: true, lowercase: true, trim: true },
     role:       { type: String, enum: ['voter', 'admin', 'election_officer', 'cec', 'officer', 'chief_election_commissioner', 'dm', 'sdm', 'cdo'], required: true, default: 'voter' },
+    password:   { type: String, select: false, default: null },
     department: { type: String, default: null },
     district:   { type: String, default: null },
     avatar:     { type: String, default: null },
