@@ -1,4 +1,12 @@
+const dns = require('dns');
 const mongoose = require('mongoose');
+
+// Configure public DNS resolvers to handle SRV records on Windows
+try {
+  dns.setServers(['8.8.8.8', '1.1.1.1']);
+} catch (e) {
+  // Ignore if unable to set servers
+}
 
 const connectDB = async () => {
   try {
