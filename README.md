@@ -1,188 +1,281 @@
+<div align="center">
+
 # 🗳️ Secure Online Voting System (SOVS)
+### *A Mission-Critical, Cryptographically Verifiable & Role-Governed Digital Democracy Platform*
 
-[![Vite](https://img.shields.io/badge/Vite-6.3-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev/)
-[![React](https://img.shields.io/badge/React-18.3-61DAFB?style=flat&logo=react&logoColor=black)](https://react.dev/)
-[![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=flat&logo=node.js&logoColor=white)](https://nodejs.org/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=flat&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
-[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-v4-06B6D4?style=flat&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Status](https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge&logo=shield)](https://github.com/pawan864/SOVS---Online-Voting-Portal)
+[![Security](https://img.shields.io/badge/Security-AES--256%20%7C%20JWT%20%7C%20RBAC-blue?style=for-the-badge&logo=vault)](https://github.com/pawan864/SOVS---Online-Voting-Portal)
+[![Stack](https://img.shields.io/badge/Stack-MERN%20%2B%20TypeScript%20%2B%20Tailwind-6366f1?style=for-the-badge&logo=react)](https://github.com/pawan864/SOVS---Online-Voting-Portal)
+[![Database](https://img.shields.io/badge/Database-MongoDB%20Atlas%20Replica-47A248?style=for-the-badge&logo=mongodb)](https://www.mongodb.com/)
 
-A modern, role-based online voting and election administration platform built for electoral oversight, voter integrity, cryptographic audit trails, and transparent democratic participation.
-
----
-
-## 🏛️ 4 Official Platform Roles
-
-The application strictly enforces **4 distinct administrative & participation roles**:
-
-| Role | Role Name (हिन्दी) | Login Type | Credentials / Details | Primary Dashboard & Capabilities |
-| :--- | :--- | :--- | :--- | :--- |
-| **Voter** | मतदाता | **Aadhaar / ECI + OTP** | **Aadhaar:** `1234-5678-9012`<br/>**ECI:** `ECI-VTR-001`<br/>**OTP:** `123456` | `/dashboard` & `/voter-dashboard`<br/>• Browse eligible active elections<br/>• Cast encrypted single-instance ballots<br/>• View cryptographic receipts & hashes<br/>• Submit feedback and location-based complaints |
-| **Election Officer** | चुनाव अधिकारी | **Email & Password** | **Email:** `officer@securevote.gov.in`<br/>**Password:** `Officer@1234` | `/officer-dashboard`<br/>• District & polling station monitoring<br/>• Live turnout and hourly pattern analytics<br/>• Incident response & field resolution<br/>• Departmental complaints inbox |
-| **Admin** | व्यवस्थापक | **Email & Password** | **Email:** `admin@securevote.gov.in`<br/>**Password:** `Admin@1234` | `/admin-dashboard` & `/admin`<br/>• Create & configure elections & candidates<br/>• Manage eligible voters & area restrictions<br/>• Geographic location hierarchy management<br/>• User management, blocking/unblocking & notices |
-| **Chief Election Commissioner (CEC)** | मुख्य चुनाव आयुक्त | **Email & Password** | **Email:** `cec@securevote.gov.in`<br/>**Password:** `CEC@1234` | `/cec-dashboard`<br/>• Apex Commission oversight & analytics<br/>• Demographic & national turnout trends<br/>• Audit trail verification & certification<br/>• Apex complaint reviews |
+<p align="center">
+  <a href="#-core-pillars">Core Pillars</a> •
+  <a href="#-architecture-blueprint">Architecture</a> •
+  <a href="#-governance-roles--credentials">Roles & Access</a> •
+  <a href="#-api-directory">API Directory</a> •
+  <a href="#-local-development">Getting Started</a> •
+  <a href="#-deployment">Deployment</a>
+</p>
 
 ---
 
-## 📁 Repository Structure
+</div>
+
+## 📌 Executive Summary
+
+**SOVS (Secure Online Voting System)** is an enterprise-grade electronic electoral infrastructure built to modernize democratic elections. Engineered with **zero-knowledge privacy principles**, **multi-tier Role-Based Access Control (RBAC)**, and **tamper-evident audit trails**, SOVS eliminates electoral fraud, enforces strict single-ballot constraints, and delivers verifiable election transparency from polling booths to the national apex commission.
+
+---
+
+## 🌟 Core Pillars
+
+<table>
+  <tr>
+    <td width="50%">
+      <h3>🔐 Cryptographic Ballot Secrecy</h3>
+      <ul>
+        <li><b>One Person, One Vote:</b> Enforced by MongoDB compound unique indexes (<code>userId</code> + <code>electionId</code>).</li>
+        <li><b>Zero-Knowledge Separation:</b> Voter identity is cryptographically decoupled from candidate choices.</li>
+        <li><b>Digital Audit Receipts:</b> Every ballot produces an immutable Base64 verification hash with timestamp proof.</li>
+      </ul>
+    </td>
+    <td width="50%">
+      <h3>📍 Area-Locked Electoral Boundaries</h3>
+      <ul>
+        <li><b>Multi-Level Geofencing:</b> <code>State → District → Sub-District → Locality</code> hierarchical geofencing.</li>
+        <li><b>Dynamic Voter Verification:</b> Restricts voters to ballots strictly registered to their administrative constituency.</li>
+        <li><b>Granular Candidate Visibility:</b> Elections are filtered dynamically based on eligibility registries.</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <h3>🛡️ Defense-in-Depth Security</h3>
+      <ul>
+        <li><b>Rate-Limiting & Anti-Brute Force:</b> Tiered request throttlers for sensitive authentication and public endpoints.</li>
+        <li><b>HTTP Hardening:</b> Full HTTP header protection using Helmet, CORS origin isolation, and parameterized queries.</li>
+        <li><b>Dual-Factor Voter Onboarding:</b> Mock Aadhaar/ECI identity verification with fast OTP authorization.</li>
+      </ul>
+    </td>
+    <td width="50%">
+      <h3>📊 Live Governance & Incident Response</h3>
+      <ul>
+        <li><b>Turnout Analytics:</b> Real-time hourly turnout monitoring and demographic participation distributions.</li>
+        <li><b>Booth Glitch Tracking:</b> On-ground Election Officers log and resolve EVM, power, or polling station incidents.</li>
+        <li><b>Voter Redressal Inbox:</b> Direct citizen grievance routing with official response tracking.</li>
+      </ul>
+    </td>
+  </tr>
+</table>
+
+---
+
+## 🏛️ Governance Roles & Credentials
+
+The system defines **4 distinct constitutional roles** designed around separation of concerns:
 
 ```
-SOVS/
-├── frontend/                   # React 18 + Vite + TypeScript client application
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── components/
-│   │   │   │   ├── dashboards/ # Role dashboards (Admin, Officer, CEC, Voter)
-│   │   │   │   ├── shared/     # Reusable hooks & election panels
-│   │   │   │   ├── ui/         # Modern Shadcn/Tailwind UI primitives
-│   │   │   │   ├── Login.tsx   # Multilingual login with role selector & OTP
-│   │   │   │   ├── Dashboard.tsx # Voter gateway with automatic role routing
-│   │   │   │   └── Root.tsx    # App root provider wrapper
-│   │   │   ├── lib/
-│   │   │   │   ├── config.ts   # Centralized environment-aware API URL resolver
-│   │   │   │   ├── auth.ts     # Client auth service & session management
-│   │   │   │   └── elections.ts# Local election services & data types
-│   │   │   ├── routes.tsx      # React Router definition with role routes
-│   │   │   └── App.tsx         # Main entry component
-│   │   └── styles/             # Tailwind CSS tokens & global styles
-│   ├── .env.example            # Frontend environment variable template
-│   ├── vercel.json             # Vercel SPA routing rewrite rules
-│   ├── package.json
-│   └── vite.config.ts          # Vite configuration & dev server proxy
-│
-├── backend/                    # Node.js + Express REST API server
-│   ├── config/
-│   │   └── db.js               # MongoDB connection with Windows SRV DNS fallback
-│   ├── middleware/
-│   │   └── auth.js             # JWT verification & role-based route guard
-│   ├── models/                 # Mongoose schema definitions
-│   │   ├── User.js             # User accounts, roles, bcrypt hashing
-│   │   ├── Election.js         # Elections, candidates, geographic scope
-│   │   ├── Vote.js             # Encrypted votes, compound unique index
-│   │   ├── Incident.js         # Booth glitches & field incidents
-│   │   ├── Feedback.js         # Voter feedback & complaints routing
-│   │   ├── Location.js         # Hierarchical geographical registry
-│   │   ├── Notice.js           # Administrative broadcast notices
-│   │   └── AuditLog.js         # Immutable security & activity audit trail
-│   ├── routes/                 # Express API routes
-│   │   ├── auth.js             # OTP voter login & staff credential auth
-│   │   ├── dashboard.js        # Overview metrics for all 4 roles
-│   │   ├── elections.js        # Election CRUD, candidate management
-│   │   ├── votes.js            # Vote casting, receipts, verification
-│   │   ├── incidents.js        # Incident logging & resolution
-│   │   ├── feedback.js         # Feedback submission & authority responses
-│   │   ├── locations.js        # Location hierarchy endpoints
-│   │   ├── notices.js          # Voter notices & announcements
-│   │   └── users.js            # User administration & voter blocking
-│   ├── seed/
-│   │   └── seeder.js           # Database seeder with 4 official demo roles
-│   ├── .env.example            # Backend environment variable template
-│   ├── package.json
-│   └── server.js               # Express application entry point
-│
-├── .gitignore                  # Monorepo ignore rules (node_modules, .env, dist)
-└── README.md                   # Full platform documentation
+                               ┌─────────────────────────────────┐
+                               │   Secure Access Gateway (/login) │
+                               └──────────────┬──────────────────┘
+                                              │
+              ┌───────────────────────────────┼───────────────────────────────┐
+              ▼                               ▼                               ▼
+    ┌──────────────────┐            ┌──────────────────┐            ┌──────────────────┐
+    │   Voter (Citizen) │            │ Election Officer │            │   System Admin   │
+    │  • Aadhaar / ECI │            │  • District Ops  │            │  • Election Hub  │
+    │  • Cast Ballots  │            │  • Polling Booth │            │  • User Blocking │
+    │  • Get Receipt   │            │  • Resolve Issues│            │  • Geo Locations │
+    └──────────────────┘            └──────────────────┘            └──────────────────┘
+              │                               │                               │
+              └───────────────────────────────┼───────────────────────────────┘
+                                              ▼
+                                ┌───────────────────────────┐
+                                │ Chief Election Comm. (CEC)│
+                                │ • Apex National Analytics │
+                                │ • Electoral Certification │
+                                │ • System Integrity Audit  │
+                                └───────────────────────────┘
+```
+
+| Authority / Role | Identity Type | Official Credentials | Associated Route & Primary Function |
+| :--- | :--- | :--- | :--- |
+| **Voter**<br/>*(मतदाता)* | Aadhaar / ECI + OTP | **Aadhaar:** `1234-5678-9012`<br/>**ECI Card:** `ECI-VTR-001`<br/>**OTP:** `123456` | `/dashboard` & `/voter-dashboard`<br/>Browse active elections, cast encrypted ballots, download cryptographic receipts, register complaints. |
+| **Election Officer**<br/>*(चुनाव अधिकारी)* | Official Government Email | **Email:** `officer@securevote.gov.in`<br/>**Password:** `Officer@1234` | `/officer-dashboard`<br/>Supervise polling stations, monitor live turnout trends, investigate reported EVM/booth incidents. |
+| **System Admin**<br/>*(व्यवस्थापक)* | Official Government Email | **Email:** `admin@securevote.gov.in`<br/>**Password:** `Admin@1234` | `/admin-dashboard` & `/admin`<br/>Create elections, manage candidate rosters, configure geographic boundaries, block suspicious voter IDs. |
+| **Chief Election Commissioner**<br/>*(मुख्य चुनाव आयुक्त)* | Apex Commission Email | **Email:** `cec@securevote.gov.in`<br/>**Password:** `CEC@1234` | `/cec-dashboard`<br/>National-level participation metrics, commission oversight, electoral certification, apex grievance review. |
+
+---
+
+## 🏗️ Architecture Blueprint
+
+```mermaid
+flowchart TD
+    subgraph Client ["🖥️ Presentation Layer (Vite + React 18 + Tailwind)"]
+        UI_Voter["Voter Portal\n(/dashboard)"]
+        UI_Officer["Election Officer Desk\n(/officer-dashboard)"]
+        UI_Admin["Admin Control Hub\n(/admin-dashboard)"]
+        UI_CEC["CEC Apex Analytics\n(/cec-dashboard)"]
+        CONFIG["Central Config\n(src/app/lib/config.ts)"]
+        CONFIG --> UI_Voter & UI_Officer & UI_Admin & UI_CEC
+    end
+
+    subgraph Gateway ["🛡️ Security & Middleware Pipeline"]
+        CORS["CORS & Origin Filtering"]
+        HELMET["Helmet HTTP Headers"]
+        RATE["Rate Limiter (Express-Rate-Limit)"]
+        AUTH_GUARD["JWT Bearer Token Guard (protect)"]
+        RBAC_GUARD["Role Authorizer (authorize)"]
+        CORS --> HELMET --> RATE --> AUTH_GUARD --> RBAC_GUARD
+    end
+
+    subgraph Services ["⚙️ Application Core Services"]
+        AUTH_SVC["Auth Service\n(OTP & Salted BCrypt)"]
+        ELECTION_SVC["Election & Ballot Engine\n(State Machine & Location Lock)"]
+        VOTE_SVC["Vote Cast & Hash Engine\n(Base64 Cryptographic Receipts)"]
+        INCIDENT_SVC["Incident Response\n(Booth Field Reporting)"]
+        FEEDBACK_SVC["Grievance Redressal\n(Role-Targeted Routing)"]
+        AUDIT_SVC["Audit Logging\n(Tamper-Evident Trail)"]
+    end
+
+    subgraph Data ["🗄️ Persistence Layer (MongoDB Atlas Cluster)"]
+        DB_USERS[(users)]
+        DB_ELECTIONS[(elections)]
+        DB_VOTES[(votes)]
+        DB_INCIDENTS[(incidents)]
+        DB_FEEDBACK[(feedbacks)]
+        DB_LOCATIONS[(locations)]
+        DB_AUDIT[(auditlogs)]
+    end
+
+    Client --> Gateway
+    RBAC_GUARD --> AUTH_SVC & ELECTION_SVC & VOTE_SVC & INCIDENT_SVC & FEEDBACK_SVC & AUDIT_SVC
+    AUTH_SVC --> DB_USERS & DB_AUDIT
+    ELECTION_SVC --> DB_ELECTIONS & DB_LOCATIONS
+    VOTE_SVC --> DB_VOTES & DB_ELECTIONS & DB_AUDIT
+    INCIDENT_SVC --> DB_INCIDENTS & DB_AUDIT
+    FEEDBACK_SVC --> DB_FEEDBACK & DB_AUDIT
 ```
 
 ---
 
-## ⚡ Quick Start Guide
+## 🔌 API Directory
 
-### Prerequisites
-- [Node.js](https://nodejs.org/) (v18, v20, or v22 recommended)
-- [npm](https://www.npmjs.com/) (v9+)
-- [MongoDB Atlas](https://www.mongodb.com/) account or local MongoDB instance
+All API routes are served under `/api` and require JSON payloads.
+
+### 🔑 Authentication & Identity (`/api/auth`)
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/auth/voter/send-otp` | Public | Generates 15-second OTP for Aadhaar/ECI voter |
+| `POST` | `/api/auth/voter/verify-otp` | Public | Verifies OTP and returns voter session token |
+| `POST` | `/api/auth/login` | Public | Staff login for Officer, Admin, and CEC |
+| `POST` | `/api/auth/reset-password` | Public | Secure password reset for official accounts |
+| `GET` | `/api/auth/me` | Authenticated | Retrieves active user profile |
+
+### 🗳️ Elections & Ballots (`/api/elections` & `/api/votes`)
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/elections` | Optional Auth | List active/upcoming elections filtered by role/area |
+| `POST` | `/api/elections` | Admin | Create a new election with geographical scope |
+| `POST` | `/api/elections/:id/candidates` | Admin | Add candidate to specified election |
+| `GET` | `/api/elections/:id/results` | Public | Tally verified results and turnout percentages |
+| `POST` | `/api/votes/cast` | Voter | Cast encrypted ballot (one-vote guarantee) |
+| `GET` | `/api/votes/receipt/:id` | Voter | Fetch anonymous cryptographic vote receipt |
+| `GET` | `/api/votes/has-voted/:id` | Voter | Check voter participation status |
+| `GET` | `/api/votes/recent` | Staff | Stream latest verified ballot hashes |
+
+### 📊 Role Dashboards (`/api/dashboard`)
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/dashboard/voter` | Voter | Voter-specific election counters and vote history |
+| `GET` | `/api/dashboard/officer` | Officer, Admin | District polling station metrics and incident stats |
+| `GET` | `/api/dashboard/cec` | CEC, Admin | Apex national metrics, total turnout, and certified tallies |
+| `GET` | `/api/dashboard/admin` | Admin | Comprehensive system statistics and security logs |
+
+### ⚠️ Incidents, Locations & Feedback
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/incidents` | Staff | Fetch field incident reports |
+| `POST` | `/api/incidents` | Staff | Report polling booth anomaly or EVM glitch |
+| `PUT` | `/api/incidents/:id/resolve` | Staff | Mark incident as resolved with notes |
+| `GET` | `/api/locations` | Public | Query State → District → Sub-District hierarchy |
+| `POST` | `/api/feedback` | Voter | File feedback or role-directed electoral complaint |
+| `PUT` | `/api/feedback/:id/respond` | Staff | Authority replies to and closes voter grievance |
 
 ---
 
-### 1️⃣ Backend Setup
+## 💻 Local Development
 
+### 1. Clone & Setup Monorepo
 ```bash
-# Navigate to backend directory
+git clone https://github.com/pawan864/SOVS---Online-Voting-Portal.git
+cd SOVS---Online-Voting-Portal
+```
+
+### 2. Configure Backend
+```bash
 cd backend
-
-# Install dependencies
 npm install
-
-# Copy environment template
 cp .env.example .env
 ```
-
-Configure your `.env` file:
+Fill in your `backend/.env`:
 ```env
 PORT=5001
 NODE_ENV=development
 MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/securevote?retryWrites=true&w=majority
-JWT_SECRET=your_jwt_secret_key_here
+JWT_SECRET=super_secret_jwt_key_here
 JWT_EXPIRES_IN=30m
 OTP_SECRET=123456
 CLIENT_URL=http://localhost:5173
 ```
 
-Seed the default database collections and 4 official accounts:
+Seed initial database collections (creates demo users & realistic elections):
 ```bash
 node seed/seeder.js
 ```
 
-Start the backend server:
+Start the backend:
 ```bash
 node server.js
+# 🚀 SecureVote API running on http://localhost:5001
 ```
-The backend API starts on **`http://localhost:5001`**.
 
----
-
-### 2️⃣ Frontend Setup
-
+### 3. Configure Frontend
 ```bash
-# Navigate to frontend directory
+# In a new terminal
 cd ../frontend
-
-# Install dependencies
 npm install
-
-# Start development server
 npm run dev
+# ➜ Local: http://localhost:5173/
 ```
-The frontend starts on **`http://localhost:5173`**.
+
+*Note: The frontend automatically proxies `/api` calls to `http://localhost:5001` in local mode.*
 
 ---
 
-## 🔒 Security Architecture
+## ☁️ Deployment
 
-1. **Role-Based Access Control (RBAC)**:
-   - Middleware `protect` verifies incoming JWT bearer tokens.
-   - Middleware `authorize(...roles)` ensures users only execute operations permitted for their role.
-2. **One-Vote Guarantee**:
-   - Compound unique index on `{ userId: 1, electionId: 1 }` prevents a voter from casting more than one vote per election.
-   - Immediate atomic decrement & turnout tracking prevents race conditions.
-3. **Anonymized Vote Records**:
-   - Ballot records are stored with cryptographic hashes (`generateHash`).
-   - `toJSON` transforms strip voter identity, candidate selections, and IP addresses when returning audit queries.
-4. **Resilient Network Handling**:
-   - Built-in DNS resolver configuration (`8.8.8.8`, `1.1.1.1`) ensures SRV connection string resolution for MongoDB Atlas across Windows environments.
-   - Dynamic API routing automatically targets localhost in local development and production URLs in cloud environments.
-
----
-
-## 🚀 Cloud Deployment
-
-### Backend on Render
-- **Environment**: Node
+### Backend (Render / Railway / DigitalOcean)
 - **Root Directory**: `backend`
 - **Build Command**: `npm install`
 - **Start Command**: `node server.js`
-- **Environment Variables**: Add `MONGODB_URI`, `JWT_SECRET`, `NODE_ENV=production`.
+- **Required Environment Variables**:
+  `MONGODB_URI`, `JWT_SECRET`, `NODE_ENV=production`, `PORT=5001`.
 
-### Frontend on Vercel
-- **Framework Preset**: Vite
+### Frontend (Vercel / Netlify / Cloudflare Pages)
 - **Root Directory**: `frontend`
 - **Build Command**: `npm run build`
 - **Output Directory**: `dist`
-- **Environment Variables**: Set `VITE_API_URL` to your Render backend URL (e.g. `https://your-backend.onrender.com/api`).
-- [vercel.json](file:///c:/Users/Pawan/OneDrive/Desktop/SOVS%20(1)/SOVS/frontend/vercel.json) already includes client-side SPA route rewrites for `/index.html`.
+- **Required Environment Variables**:
+  `VITE_API_URL=https://<your-backend-domain>.onrender.com/api`
+- [vercel.json](file:///c:/Users/Pawan/OneDrive/Desktop/SOVS%20(1)/SOVS/frontend/vercel.json) is pre-configured with SPA route rewrites to `index.html`.
 
 ---
 
-## 📜 License
-This project is licensed under the [MIT License](LICENSE).
+## 📄 License & Attribution
+
+This project is licensed under the **MIT License**. Built with integrity for democratic transparency.
+
+<div align="center">
+  <sub>Securing Digital Democracy · Election Commission of India Portal Simulation</sub>
+</div>
