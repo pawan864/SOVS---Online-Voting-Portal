@@ -4,16 +4,16 @@ const Incident = require('../models/Incident');
 const AuditLog = require('../models/AuditLog');
 const { protect, authorize } = require('../middleware/auth');
 
-// GET /api/incidents — all (admin, dm, sdm, cdo)
-router.get('/', protect, authorize('admin', 'dm', 'sdm', 'cdo'), async (req, res) => {
+// GET /api/incidents — all (admin, election_officer, cec, dm, sdm, cdo)
+router.get('/', protect, authorize('admin', 'election_officer', 'cec', 'dm', 'sdm', 'cdo'), async (req, res) => {
   try {
     const { district, status } = req.query;
     const filter = {};
     if (district) filter.district = district;
     if (status)   filter.status = status;
 
-    // DM/SDM can only see their own district
-    if (['dm', 'sdm'].includes(req.user.role) && req.user.district) {
+    // Election Officer / DM can only see their own district if specified
+    if (['election_officer', 'dm', 'sdm'].includes(req.user.role) && req.user.district) {
       filter.district = req.user.district;
     }
 
@@ -24,8 +24,8 @@ router.get('/', protect, authorize('admin', 'dm', 'sdm', 'cdo'), async (req, res
   }
 });
 
-// POST /api/incidents — create (dm, sdm, admin)
-router.post('/', protect, authorize('admin', 'dm', 'sdm'), async (req, res) => {
+// POST /api/incidents — create (election_officer, cec, admin, dm, sdm)
+router.post('/', protect, authorize('admin', 'election_officer', 'cec', 'dm', 'sdm'), async (req, res) => {
   try {
     const { boothId, boothName, type, severity, district, notes } = req.body;
 
@@ -54,7 +54,7 @@ router.post('/', protect, authorize('admin', 'dm', 'sdm'), async (req, res) => {
 });
 
 // PUT /api/incidents/:id/resolve — resolve incident
-router.put('/:id/resolve', protect, authorize('admin', 'dm', 'sdm'), async (req, res) => {
+router.put('/:id/resolve', protect, authorize('admin', 'election_officer', 'cec', 'dm', 'sdm'), async (req, res) => {
   try {
     const incident = await Incident.findById(req.params.id);
     if (!incident) return res.status(404).json({ success: false, message: 'Incident not found' });

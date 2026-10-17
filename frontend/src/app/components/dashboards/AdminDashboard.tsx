@@ -29,10 +29,16 @@ import {
   ResponsiveContainer, PieChart, Pie, Cell,
 } from 'recharts';
 import { FeedbackInbox } from './FeedbackInbox';
+import { API } from '../../lib/config';
 
-const API    = 'https://sovs-backend-bf8j.onrender.com/api';
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
-const ALL_ROLES = ['voter', 'dm', 'sdm', 'cdo'];
+const ALL_ROLES = ['voter', 'election_officer', 'admin', 'cec'];
+const ROLE_LABELS: Record<string, string> = {
+  voter: 'VOTER',
+  election_officer: 'ELECTION OFFICER',
+  admin: 'ADMIN',
+  cec: 'CHIEF ELECTION COMM.',
+};
 
 // ── Handle expired / invalid token gracefully ──────────────────
 function checkAuth(data: any) {
@@ -60,7 +66,7 @@ const NOTICE_TYPES = [
 function CreateElectionModal({ onClose, onCreated }: { onClose: () => void; onCreated: () => void }) {
   const [form, setForm] = useState({
     title:'', description:'', startDate:'', endDate:'', totalVoters:'',
-    visibleTo: ['voter','dm','sdm','cdo'] as string[],
+    visibleTo: [...ALL_ROLES],
   });
   const [location, setLocation] = useState<LocationValue>({});
   const [loading, setLoading] = useState(false);
@@ -121,7 +127,7 @@ function CreateElectionModal({ onClose, onCreated }: { onClose: () => void; onCr
               {ALL_ROLES.map(role => (
                 <button key={role} type="button" onClick={() => toggleRole(role)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium border transition-all ${form.visibleTo.includes(role) ? 'bg-blue-600 text-white border-blue-600' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-600'}`}>
-                  {role.toUpperCase()}
+                  {ROLE_LABELS[role] || role.toUpperCase()}
                 </button>
               ))}
             </div>
@@ -645,7 +651,7 @@ function VisibilityModal({ election, onClose, onSaved }: { election: any; onClos
               className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all ${selected.includes(role) ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800'}`}>
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${selected.includes(role) ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-600 text-gray-500'}`}>{role.charAt(0).toUpperCase()}</div>
               <div className="text-left">
-                <p className={`text-sm font-semibold ${selected.includes(role) ? 'text-blue-700 dark:text-blue-300' : 'text-gray-700 dark:text-gray-300'}`}>{role.toUpperCase()}</p>
+                <p className={`text-sm font-semibold ${selected.includes(role) ? 'text-blue-700 dark:text-blue-300' : 'text-gray-700 dark:text-gray-300'}`}>{ROLE_LABELS[role] || role.toUpperCase()}</p>
                 <p className="text-xs text-gray-400">{selected.includes(role) ? '✓ Can view' : '✗ Hidden'}</p>
               </div>
             </button>

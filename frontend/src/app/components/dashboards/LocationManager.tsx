@@ -6,8 +6,7 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Badge } from '../ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/card';
-
-const API = 'https://sovs-backend-bf8j.onrender.com/api';
+import { API } from '../../lib/config';
 
 interface Location { _id: string; name: string; type: string; code?: string; parent?: any; }
 

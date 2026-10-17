@@ -94,9 +94,8 @@ app.listen(PORT, () => {
   console.log(`   GET    /api/votes/has-voted/:id  (voter)`);
   console.log(`   GET    /api/votes/receipt/:id    (voter)`);
   console.log(`   GET    /api/dashboard/admin`);
-  console.log(`   GET    /api/dashboard/dm`);
-  console.log(`   GET    /api/dashboard/sdm`);
-  console.log(`   GET    /api/dashboard/cdo`);
+  console.log(`   GET    /api/dashboard/officer`);
+  console.log(`   GET    /api/dashboard/cec`);
   console.log(`   GET    /api/dashboard/voter`);
   console.log(`   GET    /api/incidents`);
   console.log(`   PUT    /api/incidents/:id/resolve`);

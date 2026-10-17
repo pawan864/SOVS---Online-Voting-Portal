@@ -65,8 +65,7 @@ import {
   BarChart2, TrendingUp, Award, Eye, Sun, Moon, Bell,
   Info, Zap, AlertTriangle, Trash2,
 } from 'lucide-react';
-
-const API = 'https://sovs-backend-bf8j.onrender.com/api';
+import { API } from '../../lib/config';
 
 interface LocationVal {
   state?: string; district?: string; subdistrict?: string; locality?: string; label?: string;
@@ -141,7 +140,7 @@ function AreaElectionsPreview({ areaFilter, locStates, locDistricts, locSubdistr
     if (!areaFilter?.state) return;
     setLoading(true);
     const tk = token || localStorage.getItem('token');
-    fetch('https://sovs-backend-bf8j.onrender.com/api/elections', { headers: { Authorization: `Bearer ${tk}` } })
+    fetch(`${API}/elections`, { headers: { Authorization: `Bearer ${tk}` } })
       .then(r => r.json())
       .then(d => {
         if (d.success) {

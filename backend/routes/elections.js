@@ -147,7 +147,7 @@ router.post('/', protect, authorize('admin'), async (req, res) => {
       totalVoters: totalVoters || 0,
       candidates:  candidates  || [],
       location:    location    || {},
-      visibleTo:   visibleTo   || ['voter', 'dm', 'sdm', 'cdo'],
+      visibleTo:   visibleTo   || ['voter', 'election_officer', 'cec', 'admin'],
       createdBy:   req.user._id,
     });
     election.status = election.computeStatus();

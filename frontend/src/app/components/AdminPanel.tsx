@@ -37,7 +37,7 @@ export function AdminPanel() {
       return;
     }
     
-    if (!currentUser.isAdmin) {
+    if (currentUser.role !== 'admin' && !(currentUser as any).isAdmin) {
       toast.error('Access Denied', {
         description: 'You do not have admin privileges'
       });

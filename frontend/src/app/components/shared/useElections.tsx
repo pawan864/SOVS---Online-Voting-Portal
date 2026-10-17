@@ -7,8 +7,7 @@
  *   const { elections, loading, refresh } = useElections();
  */
 import { useState, useEffect, useCallback } from 'react';
-
-const API = 'https://sovs-backend-bf8j.onrender.com/api';
+import { API } from '../../lib/config';
 
 export interface Candidate {
   _id: string;

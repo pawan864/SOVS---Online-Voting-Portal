@@ -9,7 +9,7 @@ import {
   CheckCircle, Clock, Send, Filter, X,
 } from 'lucide-react';
 
-const API = 'https://sovs-backend-bf8j.onrender.com/api';
+import { API } from '../../lib/config';
 
 interface FeedbackItem {
   _id: string;
@@ -36,7 +36,7 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 interface FeedbackInboxProps {
-  role: 'admin' | 'dm' | 'sdm' | 'cdo';
+  role: 'admin' | 'election_officer' | 'cec' | 'dm' | 'sdm' | 'cdo' | string;
   token: string | null;
 }
 

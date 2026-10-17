@@ -45,29 +45,31 @@ router.get('/admin', protect, authorize('admin'), async (req, res) => {
 });
 
 // ─────────────────────────────────────────────────────────────────
-// GET /api/dashboard/dm
-// DM — district level stats
+// GET /api/dashboard/officer & GET /api/dashboard/dm
+// Election Officer — district operations & polling station stats
 // ─────────────────────────────────────────────────────────────────
-router.get('/dm', protect, authorize('admin', 'dm'), async (req, res) => {
+const handleOfficerDashboard = async (req, res) => {
   try {
     const district = req.user.district;
 
     const [totalVotesCast, openIncidents, totalIncidents] = await Promise.all([
       Vote.countDocuments(),
-      Incident.countDocuments({ status: 'Open', district }),
-      Incident.countDocuments({ district }),
+      Incident.countDocuments({ status: 'Open', ...(district ? { district } : {}) }),
+      Incident.countDocuments(district ? { district } : {}),
     ]);
 
     const allElections = await Election.find({ isActive: true, status: 'active' });
     const totalVoters  = allElections.reduce((s, e) => s + e.totalVoters, 0);
     const turnoutPct   = totalVoters > 0 ? ((totalVotesCast / totalVoters) * 100).toFixed(1) : '0.0';
 
-    const incidents = await Incident.find({ district }).sort({ createdAt: -1 }).limit(10);
+    const incidents = await Incident.find(district ? { district } : {})
+      .sort({ createdAt: -1 })
+      .limit(10);
 
     res.json({
       success: true,
       data: {
-        district,
+        district: district || 'All Districts',
         totalVotesCast,
         totalVoters,
         turnoutPercent: turnoutPct,
@@ -79,20 +81,23 @@ router.get('/dm', protect, authorize('admin', 'dm'), async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
-});
+};
+
+router.get('/officer', protect, authorize('admin', 'election_officer', 'dm'), handleOfficerDashboard);
+router.get('/dm',      protect, authorize('admin', 'election_officer', 'dm'), handleOfficerDashboard);
 
 // ─────────────────────────────────────────────────────────────────
 // GET /api/dashboard/sdm
-// SDM — sub-district / ward level stats
+// Sub-district / ward level stats (legacy compatibility)
 // ─────────────────────────────────────────────────────────────────
-router.get('/sdm', protect, authorize('admin', 'sdm'), async (req, res) => {
+router.get('/sdm', protect, authorize('admin', 'sdm', 'election_officer'), async (req, res) => {
   try {
     const district = req.user.district;
 
     const [totalVoters, totalVotesCast, openIncidents] = await Promise.all([
       User.countDocuments({ role: 'voter', isActive: true }),
       Vote.countDocuments(),
-      Incident.countDocuments({ status: 'Open', district }),
+      Incident.countDocuments({ status: 'Open', ...(district ? { district } : {}) }),
     ]);
 
     const turnoutPct = totalVoters > 0 ? ((totalVotesCast / totalVoters) * 100).toFixed(1) : '0.0';
@@ -113,10 +118,10 @@ router.get('/sdm', protect, authorize('admin', 'sdm'), async (req, res) => {
 });
 
 // ─────────────────────────────────────────────────────────────────
-// GET /api/dashboard/cdo
-// CDO — development and budget overview
+// GET /api/dashboard/cec & GET /api/dashboard/cdo
+// Chief Election Commissioner — apex analytics & electoral oversight
 // ─────────────────────────────────────────────────────────────────
-router.get('/cdo', protect, authorize('admin', 'cdo'), async (req, res) => {
+const handleCecDashboard = async (req, res) => {
   try {
     const district = req.user.district;
 
@@ -131,7 +136,7 @@ router.get('/cdo', protect, authorize('admin', 'cdo'), async (req, res) => {
     res.json({
       success: true,
       data: {
-        district,
+        district: district || 'National Apex',
         totalVoters,
         totalVotesCast,
         avgTurnout,
@@ -141,7 +146,10 @@ router.get('/cdo', protect, authorize('admin', 'cdo'), async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
-});
+};
+
+router.get('/cec', protect, authorize('admin', 'cec', 'cdo', 'chief_election_commissioner'), handleCecDashboard);
+router.get('/cdo', protect, authorize('admin', 'cec', 'cdo', 'chief_election_commissioner'), handleCecDashboard);
 
 // ─────────────────────────────────────────────────────────────────
 // GET /api/dashboard/voter

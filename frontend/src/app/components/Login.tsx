@@ -11,7 +11,7 @@ import {
   Monitor, Smartphone, Wifi, Key, Languages,
 } from 'lucide-react';
 import { toast } from 'sonner';
-const API = import.meta.env.VITE_API_URL || (typeof window !== 'undefined' && window.location.hostname === 'localhost' ? '/api' : 'https://sovs-backend-bf8j.onrender.com/api');
+import { API } from '../lib/config';
 type ForgotStep = 'idle' | 'enter-email' | 'enter-otp' | 'reset-password' | 'done';
 type VoterStep  = 'number' | 'otp' | 'create-password' | 'enter-password';
 type Lang = 'en' | 'hi';
@@ -153,7 +153,7 @@ const COLOR_THEMES = [
 const MANUAL_EN = [
   { icon: <UserCog size={18}/>, title: 'Getting Started', color: '#1a56db', steps: [
     { icon: <Monitor size={14}/>, text: 'Open SecureVote in a modern browser (Chrome, Firefox, Edge, Safari).' },
-    { icon: <Shield size={14}/>, text: 'Select your role — Voter, Admin, DM, SDM, or CDO.' },
+    { icon: <Shield size={14}/>, text: 'Select your role — Voter, Election Officer, Admin, or Chief Election Commissioner.' },
     { icon: <Key size={14}/>, text: 'Voters use Aadhaar / ECI Card; Officers use official email credentials.' },
   ]},
   { icon: <Fingerprint size={18}/>, title: 'Voter Login (OTP Flow)', color: '#059669', steps: [

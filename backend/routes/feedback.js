@@ -19,8 +19,9 @@ router.post('/', protect, authorize('voter'), async (req, res) => {
       return res.status(400).json({ success: false, message: 'type must be feedback or complaint' });
 
     // Complaints must have a targetRole
-    if (type === 'complaint' && !targetRole)
-      return res.status(400).json({ success: false, message: 'complaint must have a targetRole (dm, sdm, cdo, admin)' });
+    const validRoles = ['election_officer', 'cec', 'admin', 'dm', 'sdm', 'cdo'];
+    if (type === 'complaint' && (!targetRole || !validRoles.includes(targetRole)))
+      return res.status(400).json({ success: false, message: `complaint must have a valid targetRole (${validRoles.join(', ')})` });
 
     const feedback = await Feedback.create({
       type,
@@ -54,9 +55,10 @@ router.post('/', protect, authorize('voter'), async (req, res) => {
 // GET /api/feedback
 // Authorities — get feedback/complaints based on role
 // Admin sees everything
-// DM/SDM/CDO see: all feedback + complaints targeted to them
+// Election Officer sees: all feedback + complaints targeted to election_officer/dm/sdm
+// CEC sees: all feedback + complaints targeted to cec/cdo
 // ─────────────────────────────────────────────────────────────────
-router.get('/', protect, authorize('admin', 'dm', 'sdm', 'cdo'), async (req, res) => {
+router.get('/', protect, authorize('admin', 'election_officer', 'cec', 'dm', 'sdm', 'cdo'), async (req, res) => {
   try {
     const { type, status } = req.query;
     let filter = {};
@@ -66,12 +68,19 @@ router.get('/', protect, authorize('admin', 'dm', 'sdm', 'cdo'), async (req, res
       if (type)   filter.type   = type;
       if (status) filter.status = status;
     } else {
-      // DM/SDM/CDO: see all feedbacks + complaints targeted to their role
-      const roleFilter = [
-        { type: 'feedback' },                    // all feedback visible to all authorities
-        { type: 'complaint', targetRole: req.user.role }, // complaints targeted to them
+      // Role-specific targeted complaint matching
+      const targetRoles = [req.user.role];
+      if (['election_officer', 'dm', 'sdm'].includes(req.user.role)) {
+        targetRoles.push('election_officer', 'dm', 'sdm');
+      }
+      if (['cec', 'cdo', 'chief_election_commissioner'].includes(req.user.role)) {
+        targetRoles.push('cec', 'cdo', 'chief_election_commissioner');
+      }
+
+      filter.$or = [
+        { type: 'feedback' },                                  // all general feedback visible to all authorities
+        { type: 'complaint', targetRole: { $in: targetRoles } }, // complaints targeted to this authority
       ];
-      filter.$or = roleFilter;
       if (status) filter.status = status;
     }
 
@@ -104,7 +113,7 @@ router.get('/my', protect, authorize('voter'), async (req, res) => {
 // PUT /api/feedback/:id/respond
 // Authority — respond to feedback or complaint
 // ─────────────────────────────────────────────────────────────────
-router.put('/:id/respond', protect, authorize('admin', 'dm', 'sdm', 'cdo'), async (req, res) => {
+router.put('/:id/respond', protect, authorize('admin', 'election_officer', 'cec', 'dm', 'sdm', 'cdo'), async (req, res) => {
   try {
     const { response, status } = req.body;
     if (!response)
@@ -116,7 +125,11 @@ router.put('/:id/respond', protect, authorize('admin', 'dm', 'sdm', 'cdo'), asyn
 
     // Non-admin can only respond to their targeted complaints + all feedbacks
     if (req.user.role !== 'admin') {
-      if (feedback.type === 'complaint' && feedback.targetRole !== req.user.role)
+      const allowedRoles = [req.user.role];
+      if (['election_officer', 'dm', 'sdm'].includes(req.user.role)) allowedRoles.push('election_officer', 'dm', 'sdm');
+      if (['cec', 'cdo', 'chief_election_commissioner'].includes(req.user.role)) allowedRoles.push('cec', 'cdo', 'chief_election_commissioner');
+
+      if (feedback.type === 'complaint' && !allowedRoles.includes(feedback.targetRole))
         return res.status(403).json({ success: false, message: 'Not authorised to respond to this complaint' });
     }
 

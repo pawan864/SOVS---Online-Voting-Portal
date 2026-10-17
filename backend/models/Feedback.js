@@ -26,7 +26,7 @@ const FeedbackSchema = new mongoose.Schema(
     // For complaints: which role should see it
     targetRole: {
       type: String,
-      enum: ['dm', 'sdm', 'cdo', 'admin', null],
+      enum: ['election_officer', 'cec', 'admin', 'dm', 'sdm', 'cdo', null],
       default: null, // null = feedback (visible to all authorities)
     },
 

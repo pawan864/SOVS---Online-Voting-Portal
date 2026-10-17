@@ -63,11 +63,11 @@ const ElectionSchema = new mongoose.Schema(
       label:       { type: String, default: '' },
     },
 
-    // ✅ Which roles can see this election
+    // ✅ Which roles can view this election
     visibleTo: {
       type: [String],
-      enum: ['voter', 'dm', 'sdm', 'cdo'],
-      default: ['voter', 'dm', 'sdm', 'cdo'], // visible to all by default
+      enum: ['voter', 'election_officer', 'cec', 'admin', 'dm', 'sdm', 'cdo', 'officer', 'chief_election_commissioner'],
+      default: ['voter', 'election_officer', 'cec', 'admin'], // visible to all main roles by default
     },
   },
   {

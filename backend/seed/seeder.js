@@ -51,12 +51,15 @@ const USERS = [
   },
 ];
 
+const now = Date.now();
+const day = 24 * 60 * 60 * 1000;
+
 const ELECTIONS = [
   {
     title:       '2026 Presidential Election',
     description: 'National presidential election to elect the next president for a 4-year term.',
-    startDate:   new Date('2026-02-01'),
-    endDate:     new Date('2026-03-15'),
+    startDate:   new Date(now - 10 * day),
+    endDate:     new Date(now + 30 * day),
     status:      'active',
     totalVoters: 15000,
     turnout:     8500,
@@ -69,8 +72,8 @@ const ELECTIONS = [
   {
     title:       'City Council Election - District 5',
     description: 'Local council election for District 5 representative.',
-    startDate:   new Date('2026-03-01'),
-    endDate:     new Date('2026-03-30'),
+    startDate:   new Date(now - 5 * day),
+    endDate:     new Date(now + 15 * day),
     status:      'active',
     totalVoters: 5000,
     turnout:     1200,
@@ -82,14 +85,27 @@ const ELECTIONS = [
   {
     title:       'Student Government President',
     description: 'University student government presidential election.',
-    startDate:   new Date('2026-04-01'),
-    endDate:     new Date('2026-04-15'),
+    startDate:   new Date(now + 10 * day),
+    endDate:     new Date(now + 25 * day),
     status:      'upcoming',
     totalVoters: 12000,
     turnout:     0,
     candidates: [
       { name: 'Alex Thompson', party: 'Student Voice',   photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400', description: 'Current VP with vision for student welfare', manifesto: 'Mental health support and campus facilities' },
       { name: 'Emily Zhang',   party: 'Unity Coalition', photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400', description: 'Student activist and club leader', manifesto: 'Diversity initiatives and student activities' },
+    ],
+  },
+  {
+    title:       'State Assembly Special By-Election',
+    description: 'By-election concluded for legislative assembly representation.',
+    startDate:   new Date(now - 30 * day),
+    endDate:     new Date(now - 2 * day),
+    status:      'ended',
+    totalVoters: 25000,
+    turnout:     18400,
+    candidates: [
+      { name: 'Dr. Ramesh Patel',  party: 'National Democratic Alliance', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400', description: 'Public health administrator', manifesto: 'Healthcare infrastructure expansion' },
+      { name: 'Sunita Sharma',     party: 'United Peoples Front',         photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400', description: 'Social worker and educator', manifesto: 'Rural development and education' },
     ],
   },
 ];

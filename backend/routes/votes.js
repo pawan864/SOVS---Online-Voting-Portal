@@ -217,9 +217,9 @@ router.get('/receipt/:electionId', protect, authorize('voter'), async (req, res)
 
 // ─────────────────────────────────────────────────────────────────
 // GET /api/votes/recent
-// Admin/DM/SDM/CDO — get recent vote records (no voter identity)
+// Admin / Election Officer / CEC — get recent vote records
 // ─────────────────────────────────────────────────────────────────
-router.get('/recent', protect, authorize('admin', 'dm', 'sdm', 'cdo'), async (req, res) => {
+router.get('/recent', protect, authorize('admin', 'election_officer', 'cec', 'dm', 'sdm', 'cdo'), async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 10;
     // ✅ Use lean() to bypass toJSON transform and get raw data including voterId
